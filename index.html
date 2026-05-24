@@ -1,385 +1,254 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Banker's Safety Algorithm Simulation</title>
-    <style>
-        /* Professional Slate Theme */
-        body { 
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
-            margin: 20px; 
-            background: #f1f5f9; /* Soft cool grey-blue background */
-            color: #1e293b; /* Deep slate text */
-        }
-        
-        .container { 
-            max-width: 850px; 
-            margin: 0 auto; 
-            background: #ffffff; 
-            padding: 30px; 
-            border-radius: 12px; 
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05); 
-        }
-        
-        h1 { 
-            text-align: center; 
-            color: #0f172a; 
-            font-size: 26px; 
-            font-weight: 700;
-            border-bottom: 3px solid #3b82f6; /* Vivid blue accent line */
-            padding-bottom: 12px; 
-            margin-bottom: 25px;
-        }
-        
-        .section { margin-bottom: 25px; }
-        
-        h3 { 
-            color: #334155; 
-            margin-bottom: 12px; 
-            font-size: 15px; 
-            text-transform: uppercase; 
-            letter-spacing: 0.05em;
-        }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Banker's Safety Algorithm</title>
 
-        /* Drag & Drop style Excel Upload Box */
-        .upload-box {
-            background: #f8fafc;
-            border: 2px dashed #cbd5e1;
-            padding: 22px;
-            border-radius: 8px;
-            text-align: center;
-            margin-bottom: 15px;
-            transition: all 0.2s;
-        }
-        .upload-box:hover {
-            border-color: #3b82f6;
-            background: #f0f7ff;
-        }
-        .upload-box input[type="file"] {
-            margin-top: 10px;
-            font-size: 14px;
-            color: #475569;
-        }
-        
-        /* Responsive Table Wrapper */
-        .table-wrapper { 
-            width: 100%; 
-            overflow-x: auto; 
-            margin-bottom: 15px; 
-            border: 1px solid #e2e8f0; 
-            border-radius: 8px; 
-            box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);
-        }
-        
-        table { width: 100%; border-collapse: collapse; min-width: 550px; }
-        
-        th, td { 
-            border: 1px solid #e2e8f0; 
-            padding: 10px 12px; 
-            text-align: center; 
-            font-size: 14px; 
-        }
-        
-        th { 
-            background-color: #f8fafc; 
-            color: #475569; 
-            font-weight: 600; 
-        }
-        
-        td strong { color: #2563eb; } 
-        
-        input[type="number"] { 
-            width: 48px; 
-            padding: 6px; 
-            text-align: center; 
-            border: 1px solid #cbd5e1; 
-            border-radius: 6px; 
-            font-size: 14px; 
-            background: #f8fafc;
-            transition: all 0.2s;
-        }
-        
-        input[type="number"]:focus {
-            border-color: #3b82f6;
-            background: #ffffff;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
-        }
-        
-        .btn-container { text-align: center; margin-top: 25px; }
-        
-        button { 
-            background: #2563eb; 
-            color: white; 
-            border: none; 
-            padding: 14px 32px; 
-            font-size: 15px; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            font-weight: 600; 
-            width: 100%; 
-            max-width: 320px; 
-            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
-            transition: all 0.2s;
-        }
-        
-        button:hover { 
-            background: #1d4ed8; 
-            transform: translateY(-1px);
-            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
-        }
-        
-        #output { 
-            margin-top: 25px; 
-            padding: 16px; 
-            border-radius: 8px; 
-            font-weight: 600; 
-            font-size: 15px; 
-            text-align: center; 
-            display: none; 
-        }
-        
-        .safe { 
-            background: #ecfdf5; 
-            color: #065f46; 
-            border: 1px solid #a7f3d0; 
-            display: block !important; 
-        }
-        
-        .unsafe { 
-            background: #fef2f2; 
-            color: #991b1b; 
-            border: 1px solid #fca5a5; 
-            display: block !important; 
-        }
-    </style>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background: #f1f5f9;
+    color: #1e293b;
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+}
+
+h1 {
+    text-align: center;
+    border-bottom: 3px solid #3b82f6;
+    padding-bottom: 10px;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+input {
+    width: 60px;
+    text-align: center;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+.safe {
+    background: #dcfce7;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+.unsafe {
+    background: #fee2e2;
+    padding: 10px;
+    margin-top: 10px;
+}
+</style>
 </head>
+
 <body>
 
 <div class="container">
-    <h1>Banker's Deadlock Safety Algorithm</h1>
-    
-    <div class="section">
-        <h3>Option 1: Auto-Load Data From Excel (.xlsx / .csv)</h3>
-        <div class="upload-box">
-            <p style="margin: 0; font-weight: 500; color: #475569;">Select or drop your spreadsheet matrix file here</p>
-            <input type="file" id="excel-file" accept=".xlsx, .xls, .csv" />
-        </div>
-    </div>
+<h1>Banker's Safety Algorithm</h1>
 
-    <div class="section">
-        <h3>Option 2: Manual Entries / Available Resources Pool</h3>
-        <div class="table-wrapper">
-            <table>
-                <tr>
-                    <th>Resource A</th>
-                    <th>Resource B</th>
-                    <th>Resource C</th>
-                </tr>
-                <tr>
-                    <td><input type="number" id="avail-A" value="3"></td>
-                    <td><input type="number" id="avail-B" value="3"></td>
-                    <td><input type="number" id="avail-C" value="2"></td>
-                </tr>
-            </table>
-        </div>
-    </div>
+<h3>Available Resources</h3>
+A <input type="number" id="avail-A" value="3">
+B <input type="number" id="avail-B" value="3">
+C <input type="number" id="avail-C" value="2">
 
-    <div class="section">
-        <h3>Process Allocation & Max Demand Matrices</h3>
-        <div class="table-wrapper">
-            <table>
-                <thead>
-                    <tr>
-                        <th rowspan="2">Process</th>
-                        <th colspan="3">Current Allocation</th>
-                        <th colspan="3">Maximum Demand (Max)</th>
-                    </tr>
-                    <tr>
-                        <th>A</th><th>B</th><th>C</th>
-                        <th>A</th><th>B</th><th>C</th>
-                    </tr>
-                </thead>
-                <tbody id="matrix-body">
-                    <tr>
-                        <td><strong>P0</strong></td>
-                        <td><input type="number" class="alloc-0" value="0"></td><td><input type="number" class="alloc-0" value="1"></td><td><input type="number" class="alloc-0" value="0"></td>
-                        <td><input type="number" class="max-0" value="7"></td><td><input type="number" class="max-0" value="5"></td><td><input type="number" class="max-0" value="3"></td>
-                    </tr>
-                    <tr>
-                        <td><strong>P1</strong></td>
-                        <td><input type="number" class="alloc-1" value="2"></td><td><input type="number" class="alloc-1" value="0"></td><td><input type="number" class="alloc-1" value="0"></td>
-                        <td><input type="number" class="max-1" value="3"></td><td><input type="number" class="max-1" value="2"></td><td><input type="number" class="max-1" value="2"></td>
-                    </tr>
-                    <tr>
-                        <td><strong>P2</strong></td>
-                        <td><input type="number" class="alloc-2" value="3"></td><td><input type="number" class="alloc-2" value="0"></td><td><input type="number" class="alloc-2" value="2"></td>
-                        <td><input type="number" class="max-2" value="9"></td><td><input type="number" class="max-2" value="0"></td><td><input type="number" class="max-2" value="2"></td>
-                    </tr>
-                    <tr>
-                        <td><strong>P3</strong></td>
-                        <td><input type="number" class="alloc-3" value="2"></td><td><input type="number" class="alloc-3" value="1"></td><td><input type="number" class="alloc-3" value="1"></td>
-                        <td><input type="number" class="max-3" value="2"></td><td><input type="number" class="max-3" value="2"></td><td><input type="number" class="max-3" value="2"></td>
-                    </tr>
-                    <tr>
-                        <td><strong>P4</strong></td>
-                        <td><input type="number" class="alloc-4" value="0"></td><td><input type="number" class="alloc-4" value="0"></td><td><input type="number" class="alloc-4" value="2"></td>
-                        <td><input type="number" class="max-4" value="4"></td><td><input type="number" class="max-4" value="3"></td><td><input type="number" class="max-4" value="3"></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+<h3>Process Table</h3>
 
-    <div class="btn-container">
-        <button id="run-btn">Check System Safety State</button>
-    </div>
+<div class="table-wrapper">
+<table>
+<tr>
+<th>Process</th>
+<th colspan="3">Allocation</th>
+<th colspan="3">Max</th>
+</tr>
 
-    <div id="need-matrix-preview" class="section"></div>
+<tr>
+<th></th><th>A</th><th>B</th><th>C</th>
+<th>A</th><th>B</th><th>C</th>
+</tr>
 
-    <div id="output"></div>
+<tbody id="body">
+
+<tr>
+<td>P0</td>
+<td><input class="a0" value="0"></td><td><input class="a0" value="1"></td><td><input class="a0" value="0"></td>
+<td><input class="m0" value="7"></td><td><input class="m0" value="5"></td><td><input class="m0" value="3"></td>
+</tr>
+
+<tr>
+<td>P1</td>
+<td><input class="a1" value="2"></td><td><input class="a1" value="0"></td><td><input class="a1" value="0"></td>
+<td><input class="m1" value="3"></td><td><input class="m1" value="2"></td><td><input class="m1" value="2"></td>
+</tr>
+
+<tr>
+<td>P2</td>
+<td><input class="a2" value="3"></td><td><input class="a2" value="0"></td><td><input class="a2" value="2"></td>
+<td><input class="m2" value="9"></td><td><input class="m2" value="0"></td><td><input class="m2" value="2"></td>
+</tr>
+
+<tr>
+<td>P3</td>
+<td><input class="a3" value="2"></td><td><input class="a3" value="1"></td><td><input class="a3" value="1"></td>
+<td><input class="m3" value="2"></td><td><input class="m3" value="2"></td><td><input class="m3" value="2"></td>
+</tr>
+
+<tr>
+<td>P4</td>
+<td><input class="a4" value="0"></td><td><input class="a4" value="0"></td><td><input class="a4" value="2"></td>
+<td><input class="m4" value="4"></td><td><input class="m4" value="3"></td><td><input class="m4" value="3"></td>
+</tr>
+
+</tbody>
+</table>
 </div>
 
-<script type="module">
-    // Direct browser-level integration of SheetJS parsing module
-    import * as XLSX from 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/+esm';
+<button onclick="run()">Check Safety</button>
 
-    document.addEventListener("DOMContentLoaded", () => {
-        document.getElementById('run-btn').addEventListener('click', runBankersAlgorithm);
-        document.getElementById('excel-file').addEventListener('change', handleExcelUpload);
-    });
+<div id="need"></div>
+<div id="result"></div>
 
-    function handleExcelUpload(e) {
-        const file = e.target.files[0];
-        if (!file) return;
+</div>
 
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-            const data = new Uint8Array(evt.target.result);
-            const workbook = XLSX.read(data, { type: 'array' });
-            const sheetName = workbook.SheetNames[0];
-            const worksheet = workbook.Sheets[sheetName];
-            
-            const jsonData = XLSX.utils.sheet_to_json(worksheet);
-            if (jsonData.length === 0) return alert("Excel sheet is empty!");
+<script>
+function run() {
 
-            // Parse out baseline available pool values from row 1
-            if (jsonData[0].Avail_A !== undefined) document.getElementById('avail-A').value = jsonData[0].Avail_A;
-            if (jsonData[0].Avail_B !== undefined) document.getElementById('avail-B').value = jsonData[0].Avail_B;
-            if (jsonData[0].Avail_C !== undefined) document.getElementById('avail-C').value = jsonData[0].Avail_C;
+const n = 5, r = 3;
 
-            // Fill individual matrix rows based on keys
-            jsonData.forEach((row, i) => {
-                if (i > 4) return; 
-                
-                let allocInputs = document.querySelectorAll(`.alloc-${i}`);
-                let maxInputs = document.querySelectorAll(`.max-${i}`);
+let available = [
+parseInt(document.getElementById("avail-A").value),
+parseInt(document.getElementById("avail-B").value),
+parseInt(document.getElementById("avail-C").value)
+];
 
-                if(allocInputs.length >= 3) {
-                    allocInputs[0].value = row.Alloc_A !== undefined ? row.Alloc_A : 0;
-                    allocInputs[1].value = row.Alloc_B !== undefined ? row.Alloc_B : 0;
-                    allocInputs[2].value = row.Alloc_C !== undefined ? row.Alloc_C : 0;
-                }
-                if(maxInputs.length >= 3) {
-                    maxInputs[0].value = row.Max_A !== undefined ? row.Max_A : 0;
-                    maxInputs[1].value = row.Max_B !== undefined ? row.Max_B : 0;
-                    maxInputs[2].value = row.Max_C !== undefined ? row.Max_C : 0;
-                }
-            });
+let alloc = [], max = [], need = [];
 
-            // Fire evaluation automatically upon file load
-            runBankersAlgorithm();
-        };
-        reader.readAsArrayBuffer(file);
-    }
+// build matrices
+for (let i = 0; i < n; i++) {
 
-    function runBankersAlgorithm() {
-        const numProcesses = 5;
-        const numResources = 3;
+let a = [], m = [];
 
-        let available = [
-            parseInt(document.getElementById('avail-A').value) || 0,
-            parseInt(document.getElementById('avail-B').value) || 0,
-            parseInt(document.getElementById('avail-C').value) || 0
-        ];
+for (let j = 0; j < r; j++) {
+let av = parseInt(document.querySelectorAll(".a"+i)[j].value);
+let mx = parseInt(document.querySelectorAll(".m"+i)[j].value);
 
-        let allocation = [];
-        let max = [];
-        let need = [];
+// validation (IMPORTANT FIX)
+if (av > mx) {
+document.getElementById("result").innerHTML =
+"<div class='unsafe'>Error: Allocation cannot exceed Max</div>";
+return;
+}
 
-        for (let i = 0; i < numProcesses; i++) {
-            let allocInputs = document.querySelectorAll(`.alloc-${i}`);
-            let maxInputs = document.querySelectorAll(`.max-${i}`);
+if (av < 0 || mx < 0) {
+document.getElementById("result").innerHTML =
+"<div class='unsafe'>Error: Negative values not allowed</div>";
+return;
+}
 
-            let allocRow = Array.from(allocInputs).map(input => parseInt(input.value) || 0);
-            let maxRow = Array.from(maxInputs).map(input => parseInt(input.value) || 0);
+a.push(av);
+m.push(mx);
+}
 
-            allocation.push(allocRow);
-            max.push(maxRow);
+alloc.push(a);
+max.push(m);
+}
 
-            let needRow = [];
-            for (let j = 0; j < numResources; j++) {
-                needRow.push(maxRow[j] - allocRow[j]);
-            }
-            need.push(needRow);
-        }
+// need calculation
+for (let i = 0; i < n; i++) {
+let row = [];
+for (let j = 0; j < r; j++) {
+row.push(max[i][j] - alloc[i][j]);
+}
+need.push(row);
+}
 
-        // Print out Calculated Need Matrix dynamically for your teacher
-        let needHtml = `<h3>Calculated Need Matrix (Max - Allocation):</h3>
-        <div class="table-wrapper">
-            <table>
-                <tr><th>Process</th><th>A</th><th>B</th><th>C</th></tr>`;
-        for (let i = 0; i < numProcesses; i++) {
-            needHtml += `<tr>
-                <td><strong>P${i}</strong></td>
-                <td>${need[i][0]}</td>
-                <td>${need[i][1]}</td>
-                <td>${need[i][2]}</td>
-            </tr>`;
-        }
-        needHtml += `</table></div>`;
-        document.getElementById('need-matrix-preview').innerHTML = needHtml;
+// show need matrix
+let html = "<h3>Need Matrix</h3><table><tr><th>P</th><th>A</th><th>B</th><th>C</th></tr>";
 
-        let finish = new Array(numProcesses).fill(false);
-        let work = [...available];
-        let safeSequence = [];
+for (let i = 0; i < n; i++) {
+html += `<tr><td>P${i}</td><td>${need[i][0]}</td><td>${need[i][1]}</td><td>${need[i][2]}</td></tr>`;
+}
+html += "</table>";
 
-        let count = 0;
-        while (count < numProcesses) {
-            let found = false;
+document.getElementById("need").innerHTML = html;
 
-            for (let p = 0; p < numProcesses; p++) {
-                if (!finish[p]) {
-                    let j;
-                    for (j = 0; j < numResources; j++) {
-                        if (need[p][j] > work[j]) break;
-                    }
+// banker algorithm
+let finish = Array(n).fill(false);
+let work = [...available];
+let seq = [];
 
-                    if (j === numResources) {
-                        for (let k = 0; k < numResources; k++) {
-                            work[k] += allocation[p][k];
-                        }
-                        safeSequence.push(`P${p}`);
-                        finish[p] = true;
-                        found = true;
-                        count++;
-                    }
-                }
-            }
+let count = 0;
 
-            if (!found) {
-                const outputDiv = document.getElementById('output');
-                outputDiv.className = 'unsafe';
-                outputDiv.innerHTML = "❌ SYSTEM STATE: UNSAFE!<br>The current allocation parameters lead to a Deadlock. No clear execution path exists.";
-                return;
-            }
-        }
+while (count < n) {
+let found = false;
 
-        const outputDiv = document.getElementById('output');
-        outputDiv.className = 'safe';
-        outputDiv.innerHTML = `✔️ SYSTEM STATE: SAFE!<br>Execution Safe Sequence Path: <strong>${safeSequence.join(' ➔ ')}</strong>`;
-    }
+for (let i = 0; i < n; i++) {
+
+if (!finish[i]) {
+
+let ok = true;
+
+for (let j = 0; j < r; j++) {
+if (need[i][j] > work[j]) {
+ok = false;
+break;
+}
+}
+
+if (ok) {
+for (let j = 0; j < r; j++) {
+work[j] += alloc[i][j];
+}
+seq.push("P" + i);
+finish[i] = true;
+found = true;
+count++;
+}
+}
+}
+
+if (!found) {
+document.getElementById("result").innerHTML =
+"<div class='unsafe'>⚠ Unsafe State (may lead to deadlock)</div>";
+return;
+}
+}
+
+document.getElementById("result").innerHTML =
+"<div class='safe'>Safe Sequence: " + seq.join(" → ") + "</div>";
+
+}
 </script>
+
 </body>
 </html>
