@@ -9,37 +9,37 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 20px;
-    background: #0f172a; /* Deep charcoal background */
-    color: #f8fafc; /* Crisp white-silver text */
+    background: #fff0f3; /* Light pink background */
+    color: #4c1130; /* Dark pink-gray text */
 }
 
 .container {
     max-width: 900px;
     margin: auto;
-    background: #1e293b; /* Sleek slate blue card */
+    background: #ffffff; /* White card layout container box */
     padding: 25px;
     border-radius: 12px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 4px 15px rgba(255, 182, 193, 0.4);
 }
 
 h1 {
     text-align: center;
-    border-bottom: 3px solid #38bdf8; /* Vibrant sky blue accent */
+    border-bottom: 3px solid #ff85a2; /* Soft hot pink accent line */
     padding-bottom: 10px;
-    color: #38bdf8;
+    color: #ff5c8a; /* Vibrant light pink header text */
 }
 
 h3 {
-    color: #94a3b8;
+    color: #ff758f;
     margin-top: 25px;
 }
 
 .upload-section {
-    background: #334155;
+    background: #ffe3e8; /* Soft pink background frame */
     padding: 15px;
     border-radius: 8px;
     margin-bottom: 20px;
-    border: 1px dashed #64748b;
+    border: 1px dashed #ff85a2;
 }
 
 .table-wrapper {
@@ -50,17 +50,17 @@ table {
     width: 100%;
     border-collapse: collapse;
     min-width: 600px;
-    background: #0f172a;
+    background: #fffbfe;
 }
 
 th {
-    background: #334155;
-    color: #38bdf8;
+    background: #ffccd5; /* Medium light pink table header */
+    color: #a31d44;
     font-weight: 600;
 }
 
 th, td {
-    border: 1px solid #334155;
+    border: 1px solid #ffccd5;
     padding: 10px;
     text-align: center;
 }
@@ -68,22 +68,22 @@ th, td {
 input {
     width: 60px;
     text-align: center;
-    background: #1e293b;
-    border: 1px solid #475569;
-    color: #fff;
+    background: #ffffff;
+    border: 1px solid #ffb3c1;
+    color: #4c1130;
     padding: 4px;
     border-radius: 4px;
 }
 
 input:focus {
     outline: none;
-    border-color: #38bdf8;
+    border-color: #ff5c8a;
 }
 
 button {
     width: 100%;
     padding: 12px;
-    background: #0284c7; /* Electric blue button */
+    background: #ff5c8a; /* Bright pink clickable CTA button */
     color: white;
     border: none;
     border-radius: 6px;
@@ -94,13 +94,13 @@ button {
 }
 
 button:hover {
-    background: #0369a1;
+    background: #ff477e;
 }
 
 .safe {
-    background: #064e3b; /* Forest green alert */
-    border: 1px solid #059669;
-    color: #34d399;
+    background: #e8f5e9; /* Pastel green confirmation bar */
+    border: 1px solid #81c784;
+    color: #2e7d32;
     padding: 12px;
     margin-top: 15px;
     border-radius: 6px;
@@ -108,9 +108,9 @@ button:hover {
 }
 
 .unsafe {
-    background: #7f1d1d; /* Deep red alert */
-    border: 1px solid #dc2626;
-    color: #f87171;
+    background: #ffebee; /* Pastel red alert box */
+    border: 1px solid #e57373;
+    color: #c62828;
     padding: 12px;
     margin-top: 15px;
     border-radius: 6px;
@@ -124,11 +124,10 @@ button:hover {
 <div class="container">
 <h1>Banker's Safety Algorithm</h1>
 
-<!-- Added File Upload Component Component Box -->
 <div class="upload-section">
     <strong>📁 Populate Form via CSV:</strong> 
     <input type="file" id="csvFile" accept=".csv" style="width: auto; background: transparent; border: none; color: inherit;">
-    <small style="display: block; margin-top: 5px; color: #94a3b8;">Format: Row 1 is Available (A,B,C). Rows 2-6 are P0-P4 formatted as: AllocA,AllocB,AllocC,MaxA,MaxB,MaxC</small>
+    <small style="display: block; margin-top: 5px; color: #ff758f;">Format: Row 1 is Available (A,B,C). Rows 2-6 are P0-P4 formatted as: AllocA,AllocB,AllocC,MaxA,MaxB,MaxC</small>
 </div>
 
 <h3>Available Resources</h3>
@@ -195,7 +194,6 @@ C <input type="number" id="avail-C" value="2">
 </div>
 
 <script>
-// --- Excel/CSV Data Parser function ---
 document.getElementById('csvFile').addEventListener('change', function(e) {
     const file = e.target.files[0];
     if (!file) return;
@@ -210,20 +208,17 @@ document.getElementById('csvFile').addEventListener('change', function(e) {
             return;
         }
 
-        // Parse Row 1 (Available Vectors)
         const availData = lines[0].split(',');
         document.getElementById("avail-A").value = availData[0] || 0;
         document.getElementById("avail-B").value = availData[1] || 0;
         document.getElementById("avail-C").value = availData[2] || 0;
 
-        // Parse remaining Rows (Allocation and Max arrays)
         for (let i = 0; i < 5; i++) {
             const rowData = lines[i + 1].split(',');
             if (rowData.length >= 6) {
                 const allocInputs = document.querySelectorAll(".a" + i);
                 const maxInputs = document.querySelectorAll(".m" + i);
                 
-                // Map out columns to elements
                 allocInputs[0].value = rowData[0] || 0;
                 allocInputs[1].value = rowData[1] || 0;
                 allocInputs[2].value = rowData[2] || 0;
@@ -237,7 +232,6 @@ document.getElementById('csvFile').addEventListener('change', function(e) {
     reader.readAsText(file);
 });
 
-// --- Your original algorithm script block ---
 function run() {
 
 const n = 5, r = 3;
