@@ -7,24 +7,39 @@
 
 <style>
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 20px;
-    background: #f1f5f9;
-    color: #1e293b;
+    background: #0f172a; /* Deep charcoal background */
+    color: #f8fafc; /* Crisp white-silver text */
 }
 
 .container {
     max-width: 900px;
     margin: auto;
-    background: white;
+    background: #1e293b; /* Sleek slate blue card */
     padding: 25px;
-    border-radius: 10px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
 }
 
 h1 {
     text-align: center;
-    border-bottom: 3px solid #3b82f6;
+    border-bottom: 3px solid #38bdf8; /* Vibrant sky blue accent */
     padding-bottom: 10px;
+    color: #38bdf8;
+}
+
+h3 {
+    color: #94a3b8;
+    margin-top: 25px;
+}
+
+.upload-section {
+    background: #334155;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px dashed #64748b;
 }
 
 .table-wrapper {
@@ -35,39 +50,71 @@ table {
     width: 100%;
     border-collapse: collapse;
     min-width: 600px;
+    background: #0f172a;
+}
+
+th {
+    background: #334155;
+    color: #38bdf8;
+    font-weight: 600;
 }
 
 th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
+    border: 1px solid #334155;
+    padding: 10px;
     text-align: center;
 }
 
 input {
     width: 60px;
     text-align: center;
+    background: #1e293b;
+    border: 1px solid #475569;
+    color: #fff;
+    padding: 4px;
+    border-radius: 4px;
+}
+
+input:focus {
+    outline: none;
+    border-color: #38bdf8;
 }
 
 button {
     width: 100%;
     padding: 12px;
-    background: #2563eb;
+    background: #0284c7; /* Electric blue button */
     color: white;
     border: none;
+    border-radius: 6px;
     cursor: pointer;
     margin-top: 15px;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+
+button:hover {
+    background: #0369a1;
 }
 
 .safe {
-    background: #dcfce7;
-    padding: 10px;
-    margin-top: 10px;
+    background: #064e3b; /* Forest green alert */
+    border: 1px solid #059669;
+    color: #34d399;
+    padding: 12px;
+    margin-top: 15px;
+    border-radius: 6px;
+    font-weight: bold;
 }
 
 .unsafe {
-    background: #fee2e2;
-    padding: 10px;
-    margin-top: 10px;
+    background: #7f1d1d; /* Deep red alert */
+    border: 1px solid #dc2626;
+    color: #f87171;
+    padding: 12px;
+    margin-top: 15px;
+    border-radius: 6px;
+    font-weight: bold;
 }
 </style>
 </head>
@@ -76,6 +123,13 @@ button {
 
 <div class="container">
 <h1>Banker's Safety Algorithm</h1>
+
+<!-- Added File Upload Component Component Box -->
+<div class="upload-section">
+    <strong>📁 Populate Form via CSV:</strong> 
+    <input type="file" id="csvFile" accept=".csv" style="width: auto; background: transparent; border: none; color: inherit;">
+    <small style="display: block; margin-top: 5px; color: #94a3b8;">Format: Row 1 is Available (A,B,C). Rows 2-6 are P0-P4 formatted as: AllocA,AllocB,AllocC,MaxA,MaxB,MaxC</small>
+</div>
 
 <h3>Available Resources</h3>
 A <input type="number" id="avail-A" value="3">
@@ -141,6 +195,49 @@ C <input type="number" id="avail-C" value="2">
 </div>
 
 <script>
+// --- Excel/CSV Data Parser function ---
+document.getElementById('csvFile').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const text = e.target.result;
+        const lines = text.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+        
+        if(lines.length < 6) {
+            alert("Error: File needs at least 1 row for Available and 5 rows for processes.");
+            return;
+        }
+
+        // Parse Row 1 (Available Vectors)
+        const availData = lines[0].split(',');
+        document.getElementById("avail-A").value = availData[0] || 0;
+        document.getElementById("avail-B").value = availData[1] || 0;
+        document.getElementById("avail-C").value = availData[2] || 0;
+
+        // Parse remaining Rows (Allocation and Max arrays)
+        for (let i = 0; i < 5; i++) {
+            const rowData = lines[i + 1].split(',');
+            if (rowData.length >= 6) {
+                const allocInputs = document.querySelectorAll(".a" + i);
+                const maxInputs = document.querySelectorAll(".m" + i);
+                
+                // Map out columns to elements
+                allocInputs[0].value = rowData[0] || 0;
+                allocInputs[1].value = rowData[1] || 0;
+                allocInputs[2].value = rowData[2] || 0;
+                
+                maxInputs[0].value = rowData[3] || 0;
+                maxInputs[1].value = rowData[4] || 0;
+                maxInputs[2].value = rowData[5] || 0;
+            }
+        }
+    };
+    reader.readAsText(file);
+});
+
+// --- Your original algorithm script block ---
 function run() {
 
 const n = 5, r = 3;
