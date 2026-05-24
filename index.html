@@ -233,111 +233,108 @@ document.getElementById('csvFile').addEventListener('change', function(e) {
 });
 
 function run() {
+    const n = 5, r = 3;
 
-const n = 5, r = 3;
+    // 1. Clear previous UI states completely
+    document.getElementById("need").innerHTML = "";
+    document.getElementById("result").innerHTML = "";
 
-let available = [
-parseInt(document.getElementById("avail-A").value),
-parseInt(document.getElementById("avail-B").value),
-parseInt(document.getElementById("avail-C").value)
-];
+    let available = [
+        parseInt(document.getElementById("avail-A").value) || 0,
+        parseInt(document.getElementById("avail-B").value) || 0,
+        parseInt(document.getElementById("avail-C").value) || 0
+    ];
 
-let alloc = [], max = [], need = [];
+    let alloc = [], max = [], need = [];
 
-// build matrices
-for (let i = 0; i < n; i++) {
+    // 2. Build matrices with explicit input validation
+    for (let i = 0; i < n; i++) {
+        let a = [], m = [];
+        let allocInputs = document.querySelectorAll(".a" + i);
+        let maxInputs = document.querySelectorAll(".m" + i);
 
-let a = [], m = [];
+        for (let j = 0; j < r; j++) {
+            let av = parseInt(allocInputs[j].value) || 0;
+            let mx = parseInt(maxInputs[j].value) || 0;
 
-for (let j = 0; j < r; j++) {
-let av = parseInt(document.querySelectorAll(".a"+i)[j].value);
-let mx = parseInt(document.querySelectorAll(".m"+i)[j].value);
+            if (av > mx) {
+                document.getElementById("result").innerHTML =
+                    `<div class='unsafe'>Error at P${i}: Allocation (${av}) cannot exceed Max (${mx})</div>`;
+                return;
+            }
 
-// validation (IMPORTANT FIX)
-if (av > mx) {
-document.getElementById("result").innerHTML =
-"<div class='unsafe'>Error: Allocation cannot exceed Max</div>";
-return;
-}
+            if (av < 0 || mx < 0) {
+                document.getElementById("result").innerHTML =
+                    `<div class='unsafe'>Error at P${i}: Negative values are not allowed</div>`;
+                return;
+            }
 
-if (av < 0 || mx < 0) {
-document.getElementById("result").innerHTML =
-"<div class='unsafe'>Error: Negative values not allowed</div>";
-return;
-}
+            a.push(av);
+            m.push(mx);
+        }
+        alloc.push(a);
+        max.push(m);
+    }
 
-a.push(av);
-m.push(mx);
-}
+    // 3. Need calculation
+    for (let i = 0; i < n; i++) {
+        let row = [];
+        for (let j = 0; j < r; j++) {
+            row.push(max[i][j] - alloc[i][j]);
+        }
+        need.push(row);
+    }
 
-alloc.push(a);
-max.push(m);
-}
+    // 4. Show need matrix cleanly
+    let html = "<h3>Need Matrix</h3><table><tr><th>P</th><th>A</th><th>B</th><th>C</th></tr>";
+    for (let i = 0; i < n; i++) {
+        html += `<tr><td>P${i}</td><td>${need[i][0]}</td><td>${need[i][1]}</td><td>${need[i][2]}</td></tr>`;
+    }
+    html += "</table>";
+    document.getElementById("need").innerHTML = html;
 
-// need calculation
-for (let i = 0; i < n; i++) {
-let row = [];
-for (let j = 0; j < r; j++) {
-row.push(max[i][j] - alloc[i][j]);
-}
-need.push(row);
-}
+    // 5. Banker's Safety Algorithm execution
+    let finish = Array(n).fill(false);
+    let work = [...available]; // Safe local array reference copy
+    let seq = [];
+    let count = 0;
 
-// show need matrix
-let html = "<h3>Need Matrix</h3><table><tr><th>P</th><th>A</th><th>B</th><th>C</th></tr>";
+    while (count < n) {
+        let found = false;
 
-for (let i = 0; i < n; i++) {
-html += `<tr><td>P${i}</td><td>${need[i][0]}</td><td>${need[i][1]}</td><td>${need[i][2]}</td></tr>`;
-}
-html += "</table>";
+        for (let i = 0; i < n; i++) {
+            if (!finish[i]) {
+                let ok = true;
+                for (let j = 0; j < r; j++) {
+                    if (need[i][j] > work[j]) {
+                        ok = false;
+                        break;
+                    }
+                }
 
-document.getElementById("need").innerHTML = html;
+                if (ok) {
+                    for (let j = 0; j < r; j++) {
+                        work[j] += alloc[i][j];
+                    }
+                    seq.push("P" + i);
+                    finish[i] = true;
+                    found = true;
+                    count++;
+                }
+            }
+        }
 
-// banker algorithm
-let finish = Array(n).fill(false);
-let work = [...available];
-let seq = [];
+        // If we go through a full cycle without finding a valid process, deadlock is inevitable
+        if (!found) {
+            document.getElementById("result").innerHTML =
+                "<div class='unsafe'>⚠ Unsafe State (System is in or heading toward deadlock)</div>";
+            return;
+        }
+    }
 
-let count = 0;
-
-while (count < n) {
-let found = false;
-
-for (let i = 0; i < n; i++) {
-
-if (!finish[i]) {
-
-let ok = true;
-
-for (let j = 0; j < r; j++) {
-if (need[i][j] > work[j]) {
-ok = false;
-break;
-}
-}
-
-if (ok) {
-for (let j = 0; j < r; j++) {
-work[j] += alloc[i][j];
-}
-seq.push("P" + i);
-finish[i] = true;
-found = true;
-count++;
-}
-}
-}
-
-if (!found) {
-document.getElementById("result").innerHTML =
-"<div class='unsafe'>⚠ Unsafe State (may lead to deadlock)</div>";
-return;
-}
-}
-
-document.getElementById("result").innerHTML =
-"<div class='safe'>Safe Sequence: " + seq.join(" → ") + "</div>";
-
+    // If it survives the loop, output the successful path
+    document.getElementById("result").innerHTML =
+        "<div class='safe'>Safe Sequence: " + seq.join(" → ") + "</div>";
 }
 </script>
 
