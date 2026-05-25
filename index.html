@@ -125,8 +125,8 @@ button:hover {
 <div class="container">
 <h1>Banker's Safety Algorithm</h1>
 <div class="upload-section">
-    <strong>📁 Populate Form via CSV / Excel:</strong> 
-    <input type="file" id="fileInput" accept=".csv, .xlsx, .xls" style="width: auto; background: transparent; border: none; color: inherit;">
+    <strong>📁 Populate Form via Excel:</strong> 
+    <input type="file" id="fileInput" accept=".xlsx, .xls" style="width: auto; background: transparent; border: none; color: inherit;">
     <small style="display: block; margin-top: 5px; color: #ff758f;">
         Format: Row 1 is Available (A,B,C). Rows 2-6 are P0-P4 formatted as: AllocA,AllocB,AllocC,MaxA,MaxB,MaxC
     </small>
@@ -196,7 +196,7 @@ C <input type="number" id="avail-C" value="2">
 </div>
 
 <script>
-document.getElementById('csvFile').addEventListener('change', function(e) {
+document.getElementById('fileInput').addEventListener('change', function(e) {
     const file = e.target.files[0];
     if (!file) return;
 
@@ -231,7 +231,8 @@ document.getElementById('csvFile').addEventListener('change', function(e) {
             }
         }
     };
-    reader.readAsText(file);
+   alert("Excel data loaded successfully!");
+run();
 });
 
 function run() {
